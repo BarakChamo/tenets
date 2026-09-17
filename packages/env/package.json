@@ -1,7 +1,7 @@
 {
 	"name": "@tenets/env",
-	"version": "0.5.0",
-	"description": "Composable typed environment contracts on Zod 4.5 with compiled parsing, server/client partitions, deployed-environment rules, and an optional Next.js adapter \u2014 the boundary-validation layer the tenets ruleset prescribes (Rule 2.1).",
+	"version": "0.6.0",
+	"description": "Composable typed environment contracts on Zod 4.6 with a cached schema per definition, server/client partitions, deployed-environment rules, and an optional Next.js adapter \u2014 the boundary-validation layer the tenets ruleset prescribes (Rule 2.1).",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
@@ -33,7 +33,7 @@
 		"prepublishOnly": "npm run build"
 	},
 	"peerDependencies": {
-		"zod": "^4.5.0"
+		"zod": "^4.6.0"
 	},
 	"publishConfig": {
 		"access": "public",

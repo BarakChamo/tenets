@@ -27,6 +27,18 @@ Parse with a schema library's non-throwing API (`safeParse`-style) and use the p
 the static type from the schema (`z.infer`-style) so runtime and compile-time contracts cannot
 drift. The project guide names the schema library.
 
+A boolean `validate`-style gate (Rule 3.5) fits only where nothing reads a parsed value **and** the
+schema cannot repair its input: a fallback, default or coercion makes a repaired value answer
+"valid", and the guard narrows the input type rather than the output. Everything else parses.
+
+Schema compilation is a build-step concern before it is a runtime one. A build-time compiler emits
+validators into the bundle, so nothing ships a compiler or reaches `new Function` — which a strict
+content policy forbids and a browser bundle should not carry anyway. Reach for a runtime compiler
+only where expected parses per process exceed the compile cost divided by the per-parse saving;
+that is a measurement, not an assumption, and a contract parsed once per process (an environment
+snapshot, say) never reaches it. Where compiled validators ship, the test suite runs them, so any
+divergence from the interpreter fails the gate rather than production.
+
 ## Translating a throwing dependency (Rule 02.5)
 
 ```ts

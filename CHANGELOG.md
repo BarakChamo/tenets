@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.6.0 — 2026-09-17
+
+Zod 4.6, and compilation where it actually pays.
+
+**`@tenets/env` stops compiling its schemas.** `parseEnv` still caches the schema it builds per
+definition and target — that cache is what makes repeated parses roughly thirty times cheaper than
+rebuilding the contract, and it stays. What it no longer does is call `z.compile`. Measured on Zod
+4.6.5, compiling an environment-shaped contract costs about as much as two thousand parses of it,
+and a contract is parsed once per process, so the generated fast path was startup work that never
+came back. `src/typed-env/parse.bench.ts` now prices compilation against what it saves, so the
+ratio is reproducible rather than asserted, and the README no longer credits the cache's win to
+compilation. Nothing about the API, the errors, or the parsed snapshot changes; the behavioral
+suite passes unchanged, which is the proof.
+
+The peer range moves to `zod ^4.6.0`. No 4.6-only API is used — `parseEnv` returns a parsed
+snapshot, so the new boolean `.validate()` has nothing to offer it, and `withParser`,
+`instanceof().properties()`, `iban` and `currencyCode` have no environment-variable use — but one
+supported Zod line is simpler to reason about than two.
+
+**The TypeScript profile gains the rule behind that decision.** A boolean `validate`-style gate is
+correct only where nothing reads a parsed value and the schema cannot repair its input, because a
+fallback or default makes a repaired value answer "valid" and the guard narrows the input type.
+Compilation is a build-step concern first: a build-time compiler emits validators into the bundle
+and ships no compiler and no `new Function`, while a runtime compiler earns its keep only where
+expected parses per process exceed compile cost divided by per-parse saving — a measurement, not an
+assumption. Where compiled validators ship, the test suite runs them, so divergence fails the gate
+rather than production.
+
+All packages at 0.6.0. The `tenets` skill is at 2.2.0.
+
 ## 0.5.0 — 2026-09-04
 
 Concurrent change, and decomposition for locality.

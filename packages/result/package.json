@@ -1,6 +1,6 @@
 {
 	"name": "@tenets/result",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"description": "Typed Result and ResultAsync primitives for recoverable failures \u2014 the API surface the tenets ruleset requires (Rule 7.6).",
 	"license": "MIT",
 	"repository": {

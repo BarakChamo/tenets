@@ -214,14 +214,21 @@ export function defineEnv(
 }
 
 /**
- * @description Compiled schemas per definition and target. `z.compile` is behavior-identical (it clones the
- * schema with an ahead-of-time fast path and falls back to the runtime parser when it cannot model
- * a feature), so caching it here gives every consumer compiled parsing with no API change. A
- * definition is treated as immutable once it has parsed successfully; only a successful collection
- * is cached, so a definition that throws (for example on an extension cycle) is re-collected on
- * every attempt.
+ * @description Built schemas per definition and target. Construction walks the extension graph and rebuilds
+ * the object schema and its cross-field checks, which costs roughly a thousand times what one parse
+ * does, so caching it is what makes repeated parses cheap. A definition is treated as immutable once
+ * it has parsed successfully; only a successful collection is cached, so a definition that throws
+ * (for example on an extension cycle) is re-collected on every attempt.
+ *
+ * @remarks
+ *   Deliberately not `z.compile`. An environment contract is parsed once per process, while
+ *   compiling an environment-shaped schema costs about as much as two thousand parses of it, so the
+ *   generated fast path never repays its own code generation here and only adds startup work. It
+ *   also cannot be reached by a build-time compiler: the object schema is composed at runtime from
+ *   the caller's definition, and `z.url()` and cross-field `check` callbacks are constructs every
+ *   compiler delegates back to the runtime anyway.
  */
-const compiledSchemaCache = new WeakMap<AnyEnvDefinition, Map<string, EnvObjectSchema>>();
+const builtSchemaCache = new WeakMap<AnyEnvDefinition, Map<string, EnvObjectSchema>>();
 
 /**
  * @description Parses a client-safe environment snapshot.
@@ -254,7 +261,7 @@ export function parseEnv(
 	options: ParseEnvOptions = {},
 ): Readonly<Record<string, unknown>> {
 	const target = options.target === 'client' ? 'client' : 'server';
-	const schema = compiledSchema(definition, target);
+	const schema = builtSchema(definition, target);
 	const validationSource =
 		options.emptyStringAsUndefined === false
 			? source
@@ -266,9 +273,9 @@ export function parseEnv(
 	return Object.freeze({ ...parsed.data });
 }
 
-/** @description Builds (or returns the cached) compiled schema for one definition and target. */
-const compiledSchema = (definition: AnyEnvDefinition, target: string): EnvObjectSchema => {
-	const cachedByTarget = compiledSchemaCache.get(definition);
+/** @description Builds (or returns the cached) schema for one definition and target. */
+const builtSchema = (definition: AnyEnvDefinition, target: string): EnvObjectSchema => {
+	const cachedByTarget = builtSchemaCache.get(definition);
 	const cached = cachedByTarget?.get(target);
 	if (cached) {
 		return cached;
@@ -286,13 +293,11 @@ const compiledSchema = (definition: AnyEnvDefinition, target: string): EnvObject
 	// server secret to the browser.
 	const shapeSchema: EnvObjectSchema = z.object(selectedShape);
 	const checks = target === 'client' ? [] : collectDefinitionChecks(definition);
-	const schema = z.compile(
-		checks.reduce<EnvObjectSchema>((carried, wrap) => wrap(carried), shapeSchema),
-	);
+	const schema = checks.reduce<EnvObjectSchema>((carried, wrap) => wrap(carried), shapeSchema);
 
 	const byTarget = cachedByTarget ?? new Map<string, EnvObjectSchema>();
 	byTarget.set(target, schema);
-	compiledSchemaCache.set(definition, byTarget);
+	builtSchemaCache.set(definition, byTarget);
 	return schema;
 };
 

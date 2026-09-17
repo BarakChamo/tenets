@@ -14,7 +14,7 @@ description: |
   modeling, caching, or migrating data; writing request handlers, queues, and jobs; capturing
   learnings or non-obvious discoveries; or deciding where code, data, or knowledge should live.
 metadata:
-  version: '2.1.0'
+  version: '2.2.0'
   template-version: '1'
 ---
 

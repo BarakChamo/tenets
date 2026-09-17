@@ -148,9 +148,9 @@ ships it:
   thenable async composition, dependency-free.
 - [`@tenets/invariant`](packages/invariant) — `invariant()` throwing `InvariantError` with stable
   metadata, plus `createInvariant` for production message stripping.
-- [`@tenets/env`](packages/env) — composable typed environment contracts on Zod 4.5 (Rule 2.1's
-  boundary layer): server/client partitions, deployed-environment rules, a Next.js adapter, and
-  compiled parsing (~29× faster steady-state than uncached construction).
+- [`@tenets/env`](packages/env) — composable typed environment contracts on Zod 4.6 (Rule 2.1's
+  boundary layer): server/client partitions, deployed-environment rules, a Next.js adapter, and a
+  cached schema per contract (~30× faster steady-state than rebuilding it per parse).
 
 ```sh
 npm install @tenets/result @tenets/invariant
@@ -206,8 +206,8 @@ specific additions:
   and Cucumber's BDD practice, DORA's capability research, Martin Kleppmann's *DDIA*,
   Fowler & Sadalage's *Refactoring Databases*, and twelve-factor/serverless practice.
 - **`@tenets/env`**: inspired by [t3-oss/t3-env](https://github.com/t3-oss/t3-env); adds
-  composition/inheritance, deployed-environment rules with vacuous-guard refusal, and Zod 4.5
-  compiled parsing.
+  composition/inheritance, deployed-environment rules with vacuous-guard refusal, and a cached
+  schema per contract.
 - **`@tenets/result`**: API lineage from [neverthrow](https://github.com/supermacro/neverthrow) (and
   Rust's `Result`, fp-ts's `Either`); dependency-free frozen plain objects, thenable async
   composition, `combine`.

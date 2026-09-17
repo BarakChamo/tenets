@@ -15,10 +15,10 @@
 		"@types/node": "^24.13.3",
 		"typescript": "^5.6.0",
 		"vitest": "^4.0.0",
-		"zod": "^4.5.4"
+		"zod": "^4.6.5"
 	},
-	"version": "0.5.0",
-	"description": "The tenets engineering ruleset as an agent skill: 13 rules, routing index, project-guide template, and setup commands.",
+	"version": "0.6.0",
+	"description": "The tenets engineering ruleset as an agent skill: 15 rules, routing index, project-guide template, and setup commands.",
 	"files": [
 		"skills",
 		"README.md"
