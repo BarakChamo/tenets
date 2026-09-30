@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tenets-result"
+version = "0.6.0"
+description = "Typed synchronous and asynchronous recoverable results for Python."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/BarakChamo/tenets/tree/main/packages/result-py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tenets_result"]

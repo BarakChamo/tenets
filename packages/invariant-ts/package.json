@@ -6,7 +6,7 @@
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/BarakChamo/tenets.git",
-		"directory": "packages/invariant"
+		"directory": "packages/invariant-ts"
 	},
 	"type": "module",
 	"sideEffects": false,

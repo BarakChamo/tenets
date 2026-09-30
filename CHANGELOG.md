@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.0 — 2026-10-01
+
+- Rename TypeScript primitive directories to `packages/invariant-ts` and `packages/result-ts`,
+  preserving the published `@tenets/invariant` and `@tenets/result` names.
+- Add zero-runtime-dependency Python 3.10+ `tenets-invariant` and `tenets-result` packages,
+  typed APIs, ported behavioral tests, async composition, and packaging validation.
+  Add the Python engineering profile with ty, uv/Ruff/pytest defaults, configurable schemas,
+  and explicit Python package-boundary and cancellation semantics.
+
+`@tenets/skills` is at 0.7.0; the core `tenets` skill is at 2.3.0. Primitive packages remain at 0.6.0.
+
 ## 0.6.0 — 2026-09-17
 
 Zod 4.6, and compilation where it actually pays.

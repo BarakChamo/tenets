@@ -6,7 +6,7 @@
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/BarakChamo/tenets.git",
-		"directory": "packages/result"
+		"directory": "packages/result-ts"
 	},
 	"type": "module",
 	"sideEffects": false,

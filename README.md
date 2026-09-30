@@ -3,7 +3,7 @@
 An engineering standard for coding agents, distilled from the canon and packaged as installable
 skills: **15 language-neutral rules behind a trigger-routing index, a language profile that binds
 them to one ecosystem, one editable per-project file, six commands that apply the rules to real
-code, the primitives the TypeScript profile requires, and an eval suite** that measures whether
+code, TypeScript and Python primitives, and an eval suite** that measures whether
 agents actually load and follow the rules.
 
 An agent will be exactly as good an engineer as the standard you managed to articulate — not as good
@@ -138,26 +138,55 @@ copying the procedure.
 One easily-missed detail: Gemini CLI does not read `AGENTS.md` unless `context.fileName` lists it, so
 the routing mandate needs a `GEMINI.md` pointer — `/tenets-init` offers that too.
 
+## Python profile
+
+Select `"profile": "python"` in `tenets.json`, or let `/tenets-init` detect a Python project.
+The [Python profile](skills/tenets/profiles/python.md) binds the same rules to Python with ty for
+static types, uv/Ruff/pytest defaults (documented deviations allowed), and a configurable boundary
+schema library. It specifies Python exception translation, async ownership, and package-boundary
+enforcement; the project guide supplies concrete paths and commands.
+
 ## The primitive packages
 
 The TypeScript profile fixes one API surface (Rule 7.6); everything else is configurable. This repo
-ships it:
+ships [TypeScript](skills/tenets/profiles/typescript.md) and
+[Python](skills/tenets/profiles/python.md) profiles with their matching primitives:
 
-- [`@tenets/result`](packages/result) — `Result<T, E>` / `ResultAsync<T, E>`, `ok`, `err`,
+- [`@tenets/result`](packages/result-ts) — `Result<T, E>` / `ResultAsync<T, E>`, `ok`, `err`,
   `map`/`mapErr`/`andThen`/`match`/`unwrapOr`/`combine`, `trySync`/`tryAsync`. Frozen variants,
   thenable async composition, dependency-free.
-- [`@tenets/invariant`](packages/invariant) — `invariant()` throwing `InvariantError` with stable
+- [`@tenets/invariant`](packages/invariant-ts) — `invariant()` throwing `InvariantError` with stable
   metadata, plus `createInvariant` for production message stripping.
 - [`@tenets/env`](packages/env) — composable typed environment contracts on Zod 4.6 (Rule 2.1's
   boundary layer): server/client partitions, deployed-environment rules, a Next.js adapter, and a
   cached schema per contract (~30× faster steady-state than rebuilding it per parse).
+- [`tenets-result`](packages/result-py) — Python `Result` / `ResultAsync`, frozen typed variants,
+  synchronous and async composition, zero runtime dependencies.
+- [`tenets-invariant`](packages/invariant-py) — Python assertions, metadata, and production
+  diagnostic stripping, zero runtime dependencies.
 
 ```sh
 npm install @tenets/result @tenets/invariant
+# Python 3.10+:
+python -m pip install tenets-result tenets-invariant
 ```
 
-Each release also attaches packed tarballs for registry-free installs, and `packages/*` can be
+TypeScript releases also attach npm tarballs for registry-free installs. Package sources can be
 copied into a workspace directly. Your project guide records the location either way.
+
+Python package validation (install local sources with
+`python -m pip install ./packages/result-py ./packages/invariant-py`):
+
+| Command | Purpose |
+| --- | --- |
+| `python -m unittest discover -s packages/invariant-py/tests` | Invariant behavior |
+| `python -m unittest discover -s packages/result-py/tests` | Sync and async Result behavior |
+| `python -O -m unittest discover -s packages/invariant-py/tests` | Always-on assertions under optimization |
+| `python -m mypy` | Strict public API and consumer typing contracts (install `mypy` first) |
+| `python -m build packages/invariant-py` / `python -m build packages/result-py` | Wheels and source distributions (install `build` first) |
+
+CI tests installed wheels on Python 3.10–3.14. Build and type-check tools are
+development dependencies; both packages have zero runtime dependencies.
 
 ## Evals
 
@@ -175,8 +204,9 @@ Three suites, each scenario a fresh non-interactive session:
 - `invocation.tsv` — **command routing**: explicit phrasings must reach the named workflow skill, and
   adversarial near-misses must reach none.
 
-Latest results (`evals/v040/SUMMARY.md`): routing **20/20** with zero workflow-skill hijacks,
-abidance **7/7**, command routing **16/16**. Run all three before releasing any change to a
+Latest release checks ([0.7.0 report](evals/v070/SUMMARY.md)): routing **20/22**,
+abidance **6/7**, command routing **14/16**. The report records baseline comparisons, an unresolved
+routing finding, and scorer limitations. Run all three before releasing any change to a
 description, the index, or a skill body — a ten-word edit has moved results before. Requires an
 authenticated `claude` CLI; runs cost real tokens.
 
@@ -186,12 +216,13 @@ authenticated `claude` CLI; runs cost real tokens.
 | --- | --- |
 | `skills/tenets/SKILL.md` | Routing index, loading protocol, guide and profile discovery |
 | `skills/tenets/rules/` | The 15 rule files |
-| `skills/tenets/profiles/` | Language profiles; `typescript.md` ships |
+| `skills/tenets/profiles/` | Language profiles: `typescript.md` and `python.md` |
 | `skills/tenets/templates/` | Project-guide template (WHAT / WHY / QUALITY BAR per slot) |
 | `skills/tenets/workflow/` | Shared contracts for the workflow skills: findings, scope, checklists |
 | `skills/tenets-audit`, `-review`, `-plan`, `-realign` | The four workflow commands |
 | `skills/tenets-init`, `-check` | Setup and guide audit, plus the per-harness shim templates |
-| `packages/result`, `packages/invariant`, `packages/env` | The primitives and the env boundary layer (93 specs) |
+| `packages/result-ts`, `packages/invariant-ts`, `packages/env` | TypeScript primitives and the env boundary layer |
+| `packages/result-py`, `packages/invariant-py` | Python primitives with behavioral parity tests |
 | `docs/` | Motivation, design, authoring |
 | `evals/` | Eval runner, three scenario suites, recorded results |
 | `examples/project-guide-example.md` | A real populated guide |

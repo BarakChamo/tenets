@@ -2,7 +2,7 @@
 name: tenets
 description: |
   Generic engineering ruleset for monorepos, bound to each ecosystem by a language profile
-  (TypeScript ships): typed Result error handling with invariants and the airlock, boundary
+  (TypeScript and Python ship): typed Result error handling with invariants and the airlock, boundary
   schemas, deep modules and bounded control flow, examples-first behavioral TDD, documentation
   contracts, workspace boundaries, decision framework, change delivery, data/state modeling, and
   serverless runtime discipline.
@@ -14,7 +14,7 @@ description: |
   modeling, caching, or migrating data; writing request handlers, queues, and jobs; capturing
   learnings or non-obvious discoveries; or deciding where code, data, or knowledge should live.
 metadata:
-  version: '2.2.0'
+  version: '2.3.0'
   template-version: '1'
 ---
 
@@ -23,8 +23,9 @@ metadata:
 Generic rules, never edited per project. Two files bind them to reality:
 
 - the **language profile** — `profiles/<name>.md`, named by the `profile` field of `tenets.json`
-  at the repository root, default `typescript`. It fixes the ecosystem's mechanisms: primitive
-  names, strictness settings and forbidden escape hatches, boundary-parsing and test declaration
+  at the repository root, default `typescript`.
+  Shipped profiles: [`typescript`](profiles/typescript.md) and [`python`](profiles/python.md). The selected profile fixes
+  primitive names, strictness settings and forbidden escape hatches, boundary-parsing and test declaration
   form, doc tags, packaging, plus any appended ecosystem rules and waived anchors.
 - the **project guide** — the single editable per-project file (commands, stores, paths,
   namespaces, recorded deviations). Discover it in this order: the `guide` field of `tenets.json`; a

@@ -1,0 +1,7 @@
+PASS|A01|expect=02|idx=Y|rules=02|wf=-|prof=Y|decl=Y|req=Y
+PASS|A02|expect=04|idx=Y|rules=02,04|wf=-|prof=Y|decl=Y|req=Y
+PASS|A03|expect=09|idx=Y|rules=09|wf=-|prof=Y|decl=Y|req=Y
+FAIL|A04|expect=07|idx=Y|rules=-|wf=-|prof=Y|decl=Y|req=Y
+PASS|A05|expect=02|idx=Y|rules=02|wf=-|prof=Y|decl=Y|req=Y
+PASS|A06|expect=05|idx=Y|rules=05|wf=-|prof=Y|decl=Y|req=Y
+PASS|A07|expect=07|idx=Y|rules=07|wf=-|prof=N|decl=Y|req=Y

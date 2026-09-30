@@ -46,6 +46,12 @@ Ship those exact APIs in any package you like and name their location in the gui
 provides them as `@tenets/result` and `@tenets/invariant` under `packages/` — copy them in
 or depend on them directly.
 
+The [Python profile](profiles/python.md) binds the same contract to `Result[T, E]` /
+`ResultAsync[T, E]`, snake_case composition, and `invariant` / `InvariantError`, provided by
+`tenets-result` and `tenets-invariant` (`tenets_result` / `tenets_invariant` imports). Select
+`"profile": "python"` in `tenets.json`. It requires ty, defaults to uv/Ruff/pytest, and leaves the
+schema library to the guide.
+
 ## Authoring a profile
 
 A profile is one file under `profiles/`, ~500 words, with three powers and no others:
@@ -65,8 +71,8 @@ guide's job. Set `tenets.json`'s `profile` field to the file's name; `typescript
 
 - `SKILL.md` — the routing index; loads on trigger, points to one rule file per situation.
 - `rules/` — 15 rule files, stable section anchors (`Rule 4.3`); anchors never renumber.
-- `profiles/` — one file per language/ecosystem; `typescript.md` ships, and the profile loads with
-  the rules.
+- `profiles/` — one file per language/ecosystem; `typescript.md` and `python.md` ship, and the
+  selected profile loads with the rules.
 - `templates/project-guide.md` — the editable translation template (WHAT/WHY/QUALITY BAR per slot).
 - `workflow/` — shared contracts for the `tenets-*` workflow skills: `findings.md` (finding grammar,
   severity source, confidence, dedup, summary line, worker schema), `scope.md` (guide slots, git

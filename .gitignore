@@ -4,3 +4,8 @@ evals/raw-*.jsonl
 evals/results.txt
 evals/baseline/
 evals/v040/raw-*.jsonl
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+*.egg-info/

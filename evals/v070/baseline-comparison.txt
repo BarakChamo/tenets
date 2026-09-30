@@ -1,0 +1,5 @@
+FAIL|A04|expect=07|idx=Y|rules=-|wf=-|prof=N|decl=Y|req=Y
+FAIL|I03|expect=skill:tenets-review|idx=Y|rules=01,02|wf=-|prof=N|decl=Y|req=-
+FAIL|I07|expect=skill:tenets-check|idx=Y|rules=-|wf=-|prof=N|decl=N|req=-
+FAIL|R06|expect=06|idx=N|rules=-|wf=-|prof=N|decl=N|req=-
+PASS|R19|expect=07|idx=Y|rules=01,03,07|wf=-|prof=N|decl=Y|req=-
