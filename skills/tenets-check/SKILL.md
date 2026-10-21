@@ -40,10 +40,13 @@ outside `node_modules`. Nothing found → stop: `State: BLOCKED — install the 
 2. **Freshness:** every command in the guide exists in the root manifest; every workspace in the map
    exists; primitive and store locations resolve; the stated test runner and suffixes match real
    test files.
-3. **Profile:** `tenets.json`'s `profile` (default `typescript`) resolves to a
-   `profiles/<name>.md` file in the skill, matches the repository's actual language, and every
-   anchor it waives or appends to exists in the rule files. Flag guide content the profile already
-   fixes (strictness settings, doc tags, test declaration form) as duplication.
+3. **Profiles:** `tenets.json`'s legacy `profile` (default `typescript`) resolves to a
+   `profiles/<name>.md` file in the skill, or its `profiles` map names valid profile files with
+   repository-relative path scopes. Check every configured profile against the languages and
+   runtimes in its scope; overlapping paths and shared files may intentionally select multiple
+   profiles. Cross-cutting tasks load every applicable profile. Check that every anchor waived or
+   appended to exists in the rule files. Flag guide content a selected profile already fixes
+   (strictness settings, doc tags, test declaration form) as duplication.
 4. **Quality bars:** each section satisfies its QUALITY BAR from the template; the guide stays under
    ~600 words; no section restates what code, README, or rules already say.
 5. **Anchors:** every `Rule N.M` cited by the guide exists in the ruleset's rule files, and so does

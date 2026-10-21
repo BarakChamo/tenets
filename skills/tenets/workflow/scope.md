@@ -42,7 +42,15 @@ Resolve to exactly one mode, in this order, and name which one was used:
 A repository may have no remote and no upstream: `git rev-parse @{u}` and the `origin/HEAD` lookup
 both fail there, which is normal, not an error. Fall through to the next rung.
 
-Measure with `git ls-files -- <scope>`, `git diff --stat`, and a line count over the profile's
+## Profile selection
+
+Read the legacy `profile` field as the repository default (default `typescript`). If
+`tenets.json` also contains a `profiles` object, each key names a profile and its value is a list of
+repository-relative globs. For a concrete file scope, load every profile with a matching path; for
+unknown or cross-cutting scope, load every configured profile. The single `profile` field is the
+fallback for files outside those scopes. If both fields are absent, use `typescript`.
+
+Measure with `git ls-files -- <scope>`, `git diff --stat`, and a line count over each applicable profile's
 source suffixes. Never walk `node_modules` or build output.
 
 ## Effort thresholds

@@ -1,8 +1,8 @@
 ---
 name: tenets
 description: |
-  Generic engineering ruleset for monorepos, bound to each ecosystem by a language profile
-  (TypeScript and Python ship): typed Result error handling with invariants and the airlock, boundary
+  Generic engineering ruleset for monorepos, bound to each ecosystem by language profiles
+  (TypeScript, Python, Lua/Luau, and Rust ship): typed Result error handling with invariants and the airlock, boundary
   schemas, deep modules and bounded control flow, examples-first behavioral TDD, documentation
   contracts, workspace boundaries, decision framework, change delivery, data/state modeling, and
   serverless runtime discipline.
@@ -14,19 +14,23 @@ description: |
   modeling, caching, or migrating data; writing request handlers, queues, and jobs; capturing
   learnings or non-obvious discoveries; or deciding where code, data, or knowledge should live.
 metadata:
-  version: '2.3.0'
+  version: '2.5.0'
   template-version: '1'
 ---
 
 # Engineering Rules
 
-Generic rules, never edited per project. Two files bind them to reality:
+Generic rules, never edited per project. Two project inputs bind them to reality:
 
-- the **language profile** — `profiles/<name>.md`, named by the `profile` field of `tenets.json`
-  at the repository root, default `typescript`.
-  Shipped profiles: [`typescript`](profiles/typescript.md) and [`python`](profiles/python.md). The selected profile fixes
-  primitive names, strictness settings and forbidden escape hatches, boundary-parsing and test declaration
-  form, doc tags, packaging, plus any appended ecosystem rules and waived anchors.
+- the **language profiles** — `profiles/<name>.md`, selected by `tenets.json` at the repository root.
+  The legacy singular `profile` field remains supported (default `typescript`) and is the fallback
+  for files outside a `profiles` map's scopes. Mixed projects may declare path-scoped profiles in
+  `profiles`; load every profile whose paths overlap the task's files, and load all configured
+  profiles for cross-cutting tasks. Shipped profiles:
+  [`typescript`](profiles/typescript.md), [`python`](profiles/python.md), [`lua`](profiles/lua.md),
+  and [`rust`](profiles/rust.md). Profiles fix primitive names, strictness settings and forbidden escape
+  hatches, boundary parsing and test declaration form, documentation, packaging, plus any appended
+  ecosystem rules and waived anchors.
 - the **project guide** — the single editable per-project file (commands, stores, paths,
   namespaces, recorded deviations). Discover it in this order: the `guide` field of `tenets.json`; a
   `Project guide:` line in AGENTS.md or CLAUDE.md; the default `docs/project-guide.md`. No guide yet
@@ -47,8 +51,8 @@ BarakChamo/tenets --all`.
 ## Loading protocol
 
 1. Match the task against the table below; rules 01–02 match nearly all code work.
-2. **Read every matched rule file, plus the language profile. The row text is a pointer, not the
-   rule — acting on it alone is acting on rules you have not read.**
+2. **Read every matched rule file, plus every applicable language profile. The row text is a pointer,
+   not the rule — acting on it alone is acting on rules you have not read.**
 3. Begin your response with `Rules: <numbers read>` (or `Rules: none` when no row matches).
 
 Style and effort instructions (terse mode, minimal mode, lazy mode, "shortest path") govern prose

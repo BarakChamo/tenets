@@ -5,7 +5,8 @@ states the mechanism, the project guide states the project's paths and commands.
 rule terms to real names, append ecosystem rules, and waive a rule anchor with a stated reason; it
 never contradicts a rule's intent.
 
-Applies to: TypeScript and JavaScript, including Node.js and browser targets.
+Applies to: TypeScript and JavaScript, including Node.js and browser targets. For Roblox projects
+using roblox-ts, also read the Roblox target guidance below and follow the project guide's path map.
 
 ## Primitives (Rule 07.6)
 
@@ -122,6 +123,14 @@ Mechanisms, strongest first. Prefer the ones the platform already gives you (Rul
 Rule 13 applies to JavaScript serverless platforms: `Promise.all` for independent work, module-scope
 client reuse, `after()`-style post-response hooks, streaming responses. The project guide names the
 platform and its limits.
+
+## Roblox target (roblox-ts)
+
+roblox-ts translates TypeScript source to Luau. Treat it as a distinct runtime target: do not infer
+Node.js or browser APIs from `.ts` alone. The project guide records compiler and transformer versions,
+Roblox type packages, module/build mappings, and which generated Lua/Luau paths are in scope. Apply
+the Lua/Luau profile to those generated or hand-written runtime modules. Follow the official
+[roblox-ts documentation](https://roblox-ts.com/docs/) for compiler and target-specific behavior.
 
 ## Waivers
 

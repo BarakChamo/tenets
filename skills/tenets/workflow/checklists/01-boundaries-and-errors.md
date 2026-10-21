@@ -1,4 +1,4 @@
-# Dimension 1 — Boundaries and errors (Rule 02, plus the language profile)
+# Dimension 1 — Boundaries and errors (Rule 02, plus every applicable language profile)
 
 - Does untrusted input entering a trust boundary get parsed by the schema that owns the operation,
   rather than hand-checked or cast? (2.1)

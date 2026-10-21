@@ -20,7 +20,8 @@ slices*. Four sentences, four owners, no duplication.
 
 The practical payoff is that porting the standard to a new repository means filling one template,
 and porting it to a new language means writing one ~500-word profile rather than forking fifteen
-rule files.
+rule files. A mixed-language repository maps profile names to path globs in `tenets.json`; tasks
+load all profiles covering their files, and cross-cutting work loads all configured profiles.
 
 ## Why rules are immutable and the guide is not
 

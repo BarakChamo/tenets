@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.9.0 — 2026-10-22
+
+- Publish the Rust engineering profile, including Rust's standard `Result`, invariant handling,
+  ownership and safety guidance, and Cargo/rustfmt/Clippy/test defaults.
+- Include multi-profile path selection and the Lua/Luau profile and utilities in the skill package.
+
+## 0.8.0 — 2026-10-21
+
+- Add concurrent path-scoped profile selection and Lua/Luau plus Rust profiles. Lua/Luau packages
+  provide native Result and invariant utilities for stock Lua, Luau, and roblox-ts; the Rust profile
+  uses `std::result::Result` and `assert!` with Cargo, rustfmt, Clippy, and built-in test/doctest
+  defaults.
+- Advance the core `tenets` skill metadata to 2.5.0. Package native roblox-ts entrypoints as
+  `@rbxts/tenets-result-lua@0.1.0` and `@rbxts/tenets-invariant-lua@0.1.0`.
+
 ## 0.7.0 — 2026-10-01
 
 - Rename TypeScript primitive directories to `packages/invariant-ts` and `packages/result-ts`,

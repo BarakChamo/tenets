@@ -1,0 +1,8 @@
+[package]
+name = "tenets/invariant-lua"
+description = "Dependency-free invariant checks for Lua and Luau"
+version = "0.1.0"
+license = "MIT"
+realm = "shared"
+repository = "https://github.com/BarakChamo/tenets"
+include = ["src/**", "README.md", "LICENSE"]

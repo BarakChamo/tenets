@@ -38,8 +38,11 @@ A profile is one file, roughly 500 words, with exactly three powers:
    stay citable in every ecosystem even where a rule does not apply.
 
 A profile never contradicts a rule's intent and never states a repository's paths or commands —
-those are the guide's job. Set `tenets.json`'s `profile` field to the file's name; `typescript` is
-the default. Ship the primitives the profile fixes, or name where they live in the guide.
+those are the guide's job. Set `tenets.json`'s legacy `profile` field for one profile
+(`typescript` is the default), or associate profile names with repository-relative path globs in
+`profiles`. Tasks load every profile matching their file scope; unknown or cross-cutting tasks load
+all configured profiles. The `profile` field is a fallback for paths no configured profile matches.
+Ship the primitives the profile fixes, or name where they live in the guide.
 
 ## Populating a project guide
 

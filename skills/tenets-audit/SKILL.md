@@ -53,7 +53,8 @@ against an older ruleset may not exist.
 ## Phase 3 — Load context
 
 Discover and read the project guide per `scope.md`, but only the slots the audit column lists. Read
-the language profile the guide names. **Do not read all 15 rule files** — the dimension table says
+the language profiles selected by `tenets.json` for the scoped paths. For cross-cutting scope, read
+every configured profile. **Do not read all 15 rule files** — the dimension table says
 which rules each unit needs, and per-task loading is the point of the ruleset.
 
 With no project guide, open with the degradation line from `scope.md` and suggest `/tenets-init`

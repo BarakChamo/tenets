@@ -1,7 +1,7 @@
 # Project guide (template)
 
 The single file translating the generic engineering rules (the `tenets` skill) into this
-project. Rules are never edited per project, and ecosystem mechanisms belong to the language profile
+project. Rules are never edited per project, and ecosystem mechanisms belong to the language profiles
 the skill loads; every project-specific fact, path, command, and deviation lives here.
 
 **How to populate:** replace each comment block with real content and delete the comment. Keep every
@@ -13,7 +13,8 @@ infer from code or config; never restate what a README or the rules already say.
 ## Stack
 
 <!-- WHAT: runtime(s) and versions, language/compiler version, framework(s), package manager,
-     deployment platform, and the language profile in use (`tenets.json` `profile`). One bullet
+     deployment platform, and language profiles in use (`tenets.json` `profile` or path-scoped
+     `profiles`). For mixed projects, pair each language/runtime with its covered paths. One bullet
      each.
      WHY: Rule 08 sends agents here when reference examples name a different stack; agents also use
      this to resolve version-sensitive behavior (Rule 10.1) against the right docs.
@@ -47,8 +48,8 @@ infer from code or config; never restate what a README or the rules already say.
 
 <!-- WHAT: where each rule primitive lives — Result/ResultAsync -> <package>,
      invariant + InvariantError -> <package>, boundary schema library (Rule 2.1) -> <package>.
-     The API names are fixed by the language profile (Rule 7.6); only locations are configurable
-     here.
+     In mixed projects, map each profile/path scope to its API and import/module path. The API names
+     are fixed by the applicable language profile (Rule 7.6); only locations are configurable here.
      Note any workspace that cannot use them (e.g. a publishable package that must stay
      dependency-free) and what it does instead.
      QUALITY BAR: an agent writing a failing function knows the exact import path. -->

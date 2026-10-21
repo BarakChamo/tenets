@@ -1,0 +1,22 @@
+{
+	"name": "@rbxts/tenets-result-lua",
+	"version": "0.1.0",
+	"description": "Native Luau Result primitives with roblox-ts type declarations",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/BarakChamo/tenets.git",
+		"directory": "packages/result-lua"
+	},
+	"main": "out/init.lua",
+	"types": "out/index.d.ts",
+	"typings": "out/index.d.ts",
+	"files": ["out", "README.md", "LICENSE"],
+	"scripts": {
+		"build": "node ../lua-build.mjs result-lua",
+		"prepublishOnly": "npm run build"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

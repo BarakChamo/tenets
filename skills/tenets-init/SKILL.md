@@ -36,9 +36,14 @@ AGENTS.md/CLAUDE.md, else `docs/project-guide.md` — and say which you chose.
 
 1. Read `<ruleset>/templates/project-guide.md`. If that path does not resolve, stop:
    `State: BLOCKED — install the tenets ruleset skill (skills add BarakChamo/tenets --all)`.
-2. Detect the language profile: pick the `profiles/<name>.md` file matching the repository's
-   dominant language and ecosystem, default `typescript`. If no shipped profile fits, say so and
-   stop — a new profile is an authoring task, not a guide slot.
+2. Detect every language profile needed by the repository, not only the dominant language. Preserve
+   an existing singular `profile` setting. For mixed-language repositories, configure `profiles` as
+   a map from profile name to the paths it covers; use repository-relative globs, include shared
+   paths in every applicable profile, and make overlapping paths explicit. A task loads all profiles
+   whose paths match its files; a cross-cutting or unknown-scope task loads all configured profiles.
+   Keep `profile` as the fallback for older/single-profile repositories and paths unmatched by the
+   map. If no shipped profile fits,
+   say so and stop — a new profile is an authoring task, not a guide slot.
 3. Inspect the repository and pre-fill every slot you can prove: package manager and runtime
    (lockfiles, `engines`), commands (root manifest scripts — mark the acceptance gate and any
    live/expensive commands), workspaces and namespace (manifests), dependency enforcement
@@ -50,12 +55,15 @@ AGENTS.md/CLAUDE.md, else `docs/project-guide.md` — and say which you chose.
    one line per fact, under ~600 words total. A slot the repo cannot answer yet gets an explicit
    placeholder naming what is missing (for stores: state "no store yet" explicitly). Keep the
    deviations section, `none recorded` when empty. Stamp `Template-Version: 1` under the title.
-5. Write `tenets.json` at the repository root:
-   `{ "guide": "<target path>", "profile": "<profile name>" }` (merge into an existing file rather
-   than clobbering other fields). This is the self-contained discovery record; it survives skill
-   reinstalls because it is repo-owned. Omit `profile` only when it is `typescript`, the default.
+5. Write `tenets.json` at the repository root (merge into an existing file rather than clobbering
+   other fields). Keep the legacy form for a single profile:
+   `{ "guide": "<target path>", "profile": "<profile name>" }`. For mixed repositories use, for
+   example, `{ "guide": "<target path>", "profiles": { "typescript": ["apps/web/**"],
+   "python": ["services/modal/**"], "lua": ["game/**/*.luau"], "rust": ["crates/**"] } }`.
+   The profile map is
+   repo-owned and survives skill reinstalls. Omit `profile` only when it is `typescript`, the default.
 6. Ensure AGENTS.md (or CLAUDE.md if the repo has no AGENTS.md) carries the routing mandate: read
-   the skill index, Read the matched rule files and the language profile, open responses with
+   the skill index, Read the matched rule files and every applicable language profile, open responses with
    `Rules: <numbers|none>`, stating that this overrides brevity/minimalism instructions. The mandate
    needs an always-loaded file; guide and profile discovery do not.
 7. Add a directive line to the same mandate, **naming every workflow command** so agents know they
@@ -77,5 +85,5 @@ AGENTS.md/CLAUDE.md, else `docs/project-guide.md` — and say which you chose.
    would silently not load there.
 10. Self-check every section against its QUALITY BAR from the template; fix or flag failures.
 11. Offer (do not apply unasked) the optional per-prompt determinism hook from the ruleset README.
-12. Report: the guide path, the profile, slots filled vs flagged, the AGENTS.md lines written, and
+12. Report: the guide path, configured profiles and path scopes, slots filled vs flagged, the AGENTS.md lines written, and
     which shims were offered or written.

@@ -1,10 +1,10 @@
 # tenets
 
 An engineering standard for coding agents, distilled from the canon and packaged as installable
-skills: **15 language-neutral rules behind a trigger-routing index, a language profile that binds
-them to one ecosystem, one editable per-project file, six commands that apply the rules to real
-code, TypeScript and Python primitives, and an eval suite** that measures whether
-agents actually load and follow the rules.
+skills: **15 language-neutral rules behind a trigger-routing index, profiles that bind them to one
+or more ecosystems, one editable per-project file, six commands that apply the rules to real code,
+TypeScript, Python, and Lua/Luau primitives, Rust's standard-library equivalents, and an eval
+suite** that measures whether agents actually load and follow the rules.
 
 An agent will be exactly as good an engineer as the standard you managed to articulate — not as good
 as your best day, and not as good as your intentions, but as good as the sentences you actually
@@ -78,7 +78,7 @@ never compete with the ruleset for activation during ordinary work. That is also
 mandate names them: naming is what makes them discoverable.
 
 During ordinary work agents follow the **loading protocol**: match the task against the index, read
-every matched rule file plus the language profile, and open the response with `Rules: <numbers|none>`
+every matched rule file plus every applicable language profile, and open the response with `Rules: <numbers|none>`
 — with an explicit statement that brevity and minimalism instructions govern prose, never the
 protocol. Teams wanting a hard per-prompt guarantee can add an opt-in hook, documented in
 [the ruleset's README](skills/tenets/README.md).
@@ -138,19 +138,38 @@ copying the procedure.
 One easily-missed detail: Gemini CLI does not read `AGENTS.md` unless `context.fileName` lists it, so
 the routing mandate needs a `GEMINI.md` pointer — `/tenets-init` offers that too.
 
-## Python profile
+## Mixed-language profiles
 
-Select `"profile": "python"` in `tenets.json`, or let `/tenets-init` detect a Python project.
-The [Python profile](skills/tenets/profiles/python.md) binds the same rules to Python with ty for
-static types, uv/Ruff/pytest defaults (documented deviations allowed), and a configurable boundary
-schema library. It specifies Python exception translation, async ownership, and package-boundary
-enforcement; the project guide supplies concrete paths and commands.
+Single-language projects keep the `profile` field. Mixed-language projects map profile names to
+repository-relative globs in `profiles`; tasks load all profiles matching their file scope, or every
+configured profile when the scope is cross-cutting or unknown:
+
+```json
+{
+  "guide": "docs/project-guide.md",
+  "profiles": {
+    "typescript": ["apps/roblox-ts/**", "apps/web/**"],
+    "python": ["services/modal/**"],
+    "lua": ["game/**/*.luau"],
+    "rust": ["crates/**"]
+  }
+}
+```
+
+The [Python profile](skills/tenets/profiles/python.md) uses ty for static types, uv/Ruff/pytest
+defaults (documented deviations allowed), and a configurable boundary schema library. The
+[Lua/Luau profile](skills/tenets/profiles/lua.md) records strict Luau typing, Lua/Luau dialect
+boundaries, and a synchronous Result API. The [Rust profile](skills/tenets/profiles/rust.md) uses
+the standard library's `Result` and `assert!`, with Cargo, rustfmt, and Clippy defaults. The project
+guide supplies runtime-specific details such as roblox-ts, Vercel, Modal, and Rust workspace paths
+and commands.
 
 ## The primitive packages
 
-The TypeScript profile fixes one API surface (Rule 7.6); everything else is configurable. This repo
-ships [TypeScript](skills/tenets/profiles/typescript.md) and
-[Python](skills/tenets/profiles/python.md) profiles with their matching primitives:
+Each profile fixes its API surface (Rule 7.6); the guide names where that surface lives. This repo
+ships [TypeScript](skills/tenets/profiles/typescript.md), [Python](skills/tenets/profiles/python.md),
+[Lua/Luau](skills/tenets/profiles/lua.md), and [Rust](skills/tenets/profiles/rust.md) profiles with
+their matching primitives. Rust uses standard-library primitives and needs no Tenets Rust package:
 
 - [`@tenets/result`](packages/result-ts) — `Result<T, E>` / `ResultAsync<T, E>`, `ok`, `err`,
   `map`/`mapErr`/`andThen`/`match`/`unwrapOr`/`combine`, `trySync`/`tryAsync`. Frozen variants,
@@ -164,6 +183,10 @@ ships [TypeScript](skills/tenets/profiles/typescript.md) and
   synchronous and async composition, zero runtime dependencies.
 - [`tenets-invariant`](packages/invariant-py) — Python assertions, metadata, and production
   diagnostic stripping, zero runtime dependencies.
+- [`tenets-result-lua`](packages/result-lua) and [`tenets-invariant-lua`](packages/invariant-lua) —
+  LuaRocks/Wally modules with synchronous tagged Results and invariant metadata; zero runtime
+  dependencies. Their `@rbxts/` npm packages pair native `.lua` entrypoints with declarations for
+  roblox-ts consumers.
 
 ```sh
 npm install @tenets/result @tenets/invariant
@@ -216,7 +239,7 @@ authenticated `claude` CLI; runs cost real tokens.
 | --- | --- |
 | `skills/tenets/SKILL.md` | Routing index, loading protocol, guide and profile discovery |
 | `skills/tenets/rules/` | The 15 rule files |
-| `skills/tenets/profiles/` | Language profiles: `typescript.md` and `python.md` |
+| `skills/tenets/profiles/` | Language profiles: TypeScript, Python, Lua/Luau, and Rust |
 | `skills/tenets/templates/` | Project-guide template (WHAT / WHY / QUALITY BAR per slot) |
 | `skills/tenets/workflow/` | Shared contracts for the workflow skills: findings, scope, checklists |
 | `skills/tenets-audit`, `-review`, `-plan`, `-realign` | The four workflow commands |

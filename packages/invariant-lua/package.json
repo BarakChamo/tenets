@@ -1,0 +1,22 @@
+{
+	"name": "@rbxts/tenets-invariant-lua",
+	"version": "0.1.0",
+	"description": "Native Luau invariant primitives with roblox-ts type declarations",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/BarakChamo/tenets.git",
+		"directory": "packages/invariant-lua"
+	},
+	"main": "out/init.lua",
+	"types": "out/index.d.ts",
+	"typings": "out/index.d.ts",
+	"files": ["out", "README.md", "LICENSE"],
+	"scripts": {
+		"build": "node ../lua-build.mjs invariant-lua",
+		"prepublishOnly": "npm run build"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

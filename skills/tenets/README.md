@@ -1,9 +1,9 @@
 # tenets
 
 A generic, distilled engineering ruleset for monorepos, packaged as an agent skill: 15
-language-neutral rules (~7,000 words) behind a trigger-routing index, a language profile that binds
-them to one ecosystem, one editable per-project translation file (the project guide), and two
-commands to create and audit it.
+language-neutral rules (~7,000 words) behind a trigger-routing index, profiles that bind them to one
+or more ecosystems, one editable per-project translation file (the project guide), and commands to
+create and audit it.
 
 Sources distilled: tiger-style, design-by-contract, railway-oriented programming and result types,
 Ousterhout's deep modules, behavioral TDD/BDD, DORA capabilities, DDIA-style data modeling,
@@ -31,9 +31,26 @@ upgrade later with `/tenets-check`.
 | `profiles/`   | one ecosystem's mechanisms             | when authoring one |
 | project guide | one repository's paths, commands, gate | per project       |
 
-A rule states the principle, the profile states the mechanism, the guide states the project's
-facts. Rules name the result type, the invariant assertion, and the doc, test, and packaging
-systems generically; the profile fixes the concrete names.
+A rule states the principle, each profile states the mechanisms for its ecosystem, and the guide
+states project facts. A project can select multiple profiles concurrently by path in `tenets.json`:
+
+```json
+{
+  "guide": "docs/project-guide.md",
+  "profiles": {
+    "typescript": ["apps/web/**", "apps/roblox-ts/**"],
+    "python": ["services/modal/**"],
+    "lua": ["game/**/*.luau"],
+    "rust": ["crates/**"]
+  }
+}
+```
+
+For a task, load each profile whose configured paths match the files in scope. Load all configured
+profiles when scope is cross-cutting or unknown. Existing single-profile projects retain the
+`profile` field as the fallback for paths not matched in `profiles`. Runtime distinctions
+within a language, such as roblox-ts and Vercel, belong in project guide path/runtime facts unless
+they change language-level mechanisms.
 
 ## Contract the project must satisfy
 
@@ -52,6 +69,14 @@ The [Python profile](profiles/python.md) binds the same contract to `Result[T, E
 `"profile": "python"` in `tenets.json`. It requires ty, defaults to uv/Ruff/pytest, and leaves the
 schema library to the guide.
 
+The [Lua/Luau profile](profiles/lua.md) uses synchronous tagged-table Results and invariant errors;
+the project guide records the dialect, runtime, module system, and async adapter. It applies to stock
+Lua and Roblox Luau while keeping their syntax and globals distinct.
+
+The [Rust profile](profiles/rust.md) uses `std::result::Result` and `assert!` directly, with Cargo,
+rustfmt, Clippy, and Cargo's built-in test and doctest support. It does not require custom primitive
+crates; the guide records the toolchain, MSRV, targets, and workspace details.
+
 ## Authoring a profile
 
 A profile is one file under `profiles/`, ~500 words, with three powers and no others:
@@ -65,14 +90,16 @@ A profile is one file under `profiles/`, ~500 words, with three powers and no ot
   stay citable in every ecosystem.
 
 Never contradict a rule's intent, and never restate a project's paths or commands — those are the
-guide's job. Set `tenets.json`'s `profile` field to the file's name; `typescript` is the default.
+guide's job. Set `tenets.json`'s legacy `profile` field for one profile (`typescript` is the default)
+or use its `profiles` map to associate profile names with repository-relative path globs.
 
 ## Layout
 
 - `SKILL.md` — the routing index; loads on trigger, points to one rule file per situation.
 - `rules/` — 15 rule files, stable section anchors (`Rule 4.3`); anchors never renumber.
-- `profiles/` — one file per language/ecosystem; `typescript.md` and `python.md` ship, and the
-  selected profile loads with the rules.
+- `profiles/` — one file per language/ecosystem; `typescript.md`, `python.md`, `lua.md`, and
+  `rust.md` ship.
+  Load every selected profile that applies to the task's paths.
 - `templates/project-guide.md` — the editable translation template (WHAT/WHY/QUALITY BAR per slot).
 - `workflow/` — shared contracts for the `tenets-*` workflow skills: `findings.md` (finding grammar,
   severity source, confidence, dedup, summary line, worker schema), `scope.md` (guide slots, git

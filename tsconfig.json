@@ -11,5 +11,5 @@
 		"skipLibCheck": true,
 		"verbatimModuleSyntax": true
 	},
-	"include": ["packages/*/src/**/*.ts"]
+	"include": ["packages/*/src/**/*.ts", "packages/*/roblox-ts/**/*.ts"]
 }

@@ -1,5 +1,7 @@
 node_modules/
 dist/
+packages/result-lua/out/
+packages/invariant-lua/out/
 evals/raw-*.jsonl
 evals/results.txt
 evals/baseline/
